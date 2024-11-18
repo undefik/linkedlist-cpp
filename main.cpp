@@ -60,12 +60,23 @@ public:
 		this->count++;
 	}
 	void remove(int pos){
-		if(pos > this->count || pos < 0){return;}
-		ListItem* auxitem = getptr(pos-1);
-		ListItem* delitem = auxitem->next;
-		ListItem* following = delitem->next;
-		delete delitem;
-		auxitem->next = following;
+		if(pos >= this->count || pos < 0){return;}
+		if(pos == 0){
+			ListItem* delitem = this->first;
+			this->first = delitem->next;
+			delete delitem;
+		}else if(pos == this->count-1){
+			ListItem* auxitem = getptr(pos-1);
+			ListItem* delitem = auxitem->next;
+			delete delitem;
+			auxitem->next = nullptr;
+		}else{
+			ListItem* auxitem = getptr(pos-1);
+			ListItem* delitem = auxitem->next;
+			ListItem* following = delitem->next;
+			delete delitem;
+			auxitem->next = following;
+		}
 		this->count--;
 	}
 };
@@ -75,7 +86,6 @@ int main() {
 	l.push(3);
 	l.push(4);
 	l.insert(1,5);
-	l.remove(1);
 	printf("Pole ma delku %d a obsahuje prvky: [ ", l.length());
 	for(int i = 0; i < l.length(); i++){
 		printf("%d ", l.get(i));
