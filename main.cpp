@@ -23,22 +23,6 @@ public:
 		this->first = NULL;
 		this->count = 0;
 	}
-	void push(int val){
-		if(count == 0){
-			this->first = (ListItem*)malloc(sizeof(ListItem));
-			*this->first = ListItem(val);
-		}else{
-			ListItem* last;
-			last = first; 
-			while(last->next != NULL){
-				last = *(&last->next);
-			}
-			last->next = (ListItem*)malloc(sizeof(ListItem));
-			*last->next = ListItem(val);
-		}
-		count++;
-	}
-
 	ListItem* getptr(int pos){
 		if(pos >= this->count || pos < 0){return NULL;}
 		ListItem* auxitem = this->first;
@@ -49,13 +33,28 @@ public:
 		}
 		return auxitem;
 	}
+	int get(int pos){
+		return getptr(pos)->value;
+	}
+	int length(){
+		return this->count;
+	}
+	void push(int val){
+		if(count == 0){
+			this->first = new ListItem(val);
+		}else{
+			ListItem* last = this->getptr(this->count-1);
+			last->next = new ListItem(val);
+		}
+		count++;
+	}
+
 	void insert(int pos, int val){
 		if(pos > this->count || pos < 0){return;}
 		if(pos == this->count){this->push(val);return;}
 		ListItem* auxitem = getptr(pos-1);
 		ListItem* following = auxitem->next;
-		ListItem* newitem = (ListItem*)malloc(sizeof(ListItem)); 
-		*newitem = ListItem(val);
+		ListItem* newitem = new ListItem(val);
 		auxitem->next = newitem;
 		newitem->next = following;
 		this->count++;
@@ -63,16 +62,11 @@ public:
 	void remove(int pos){
 		if(pos > this->count || pos < 0){return;}
 		ListItem* auxitem = getptr(pos-1);
-		ListItem* following = auxitem->next->next;
-		free(auxitem->next);
+		ListItem* delitem = auxitem->next;
+		ListItem* following = delitem->next;
+		delete delitem;
 		auxitem->next = following;
-
-	}
-	int get(int pos){
-		return getptr(pos)->value;
-	}
-	int length(){
-		return this->count;
+		this->count--;
 	}
 };
 
