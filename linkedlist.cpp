@@ -1,27 +1,27 @@
 
-class LinkedListItem {
+template<class T> class LinkedListItem {
 public:
-	int value;
-	LinkedListItem* next;
+	T value;
+	LinkedListItem<T>* next;
 	LinkedListItem(int value) {
 		this->value = value;
 		this->next = nullptr;
 	}
 };
 
-class LinkedList {
+template<class T> class LinkedList {
 private:
 	int count;
-	LinkedListItem *first;
+	LinkedListItem<T> *first;
 
 public:
 	LinkedList() {
 		this->first = nullptr;
 		this->count = 0;
 	}
-	LinkedListItem* getptr(int pos){
+	LinkedListItem<T>* getptr(int pos){
 		if(pos >= this->count || pos < 0){return nullptr;}
-		LinkedListItem* auxitem = this->first;
+		LinkedListItem<T>* auxitem = this->first;
 		int aux = 0;
 		while(aux < pos){
 			auxitem = *(&auxitem->next);
@@ -37,10 +37,10 @@ public:
 	}
 	void push(int val){
 		if(count == 0){
-			this->first = new LinkedListItem(val);
+			this->first = new LinkedListItem<T>(val);
 		}else{
-			LinkedListItem* last = this->getptr(this->count-1);
-			last->next = new LinkedListItem(val);
+			LinkedListItem<T>* last = this->getptr(this->count-1);
+			last->next = new LinkedListItem<T>(val);
 		}
 		count++;
 	}
@@ -48,9 +48,9 @@ public:
 	void insert(int pos, int val){
 		if(pos > this->count || pos < 0){return;}
 		if(pos == this->count){this->push(val);return;}
-		LinkedListItem* auxitem = getptr(pos-1);
-		LinkedListItem* following = auxitem->next;
-		LinkedListItem* newitem = new LinkedListItem(val);
+		LinkedListItem<T>* auxitem = getptr(pos-1);
+		LinkedListItem<T>* following = auxitem->next;
+		LinkedListItem<T>* newitem = new LinkedListItem<T>(val);
 		auxitem->next = newitem;
 		newitem->next = following;
 		this->count++;
@@ -58,18 +58,18 @@ public:
 	void remove(int pos){
 		if(pos >= this->count || pos < 0){return;}
 		if(pos == 0){
-			LinkedListItem* delitem = this->first;
+			LinkedListItem<T>* delitem = this->first;
 			this->first = delitem->next;
 			delete delitem;
 		}else if(pos == this->count-1){
-			LinkedListItem* auxitem = getptr(pos-1);
-			LinkedListItem* delitem = auxitem->next;
+			LinkedListItem<T>* auxitem = getptr(pos-1);
+			LinkedListItem<T>* delitem = auxitem->next;
 			delete delitem;
 			auxitem->next = nullptr;
 		}else{
-			LinkedListItem* auxitem = getptr(pos-1);
-			LinkedListItem* delitem = auxitem->next;
-			LinkedListItem* following = delitem->next;
+			LinkedListItem<T>* auxitem = getptr(pos-1);
+			LinkedListItem<T>* delitem = auxitem->next;
+			LinkedListItem<T>* following = delitem->next;
 			delete delitem;
 			auxitem->next = following;
 		}
